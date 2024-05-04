@@ -5,14 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title inertia>AdonisJS x Inertia x React</title>
+  <title inertia>Spaces: A Web App for taking Notes</title>
 
   @viteReactRefresh()
   @inertiaHead()
   @vite(['inertia/app/app.tsx', `inertia/pages/${page.component}.tsx`])
 </head>
 
-<body>
+<body class="{{ cssClass }}">
   @inertia()
 </body>
 
