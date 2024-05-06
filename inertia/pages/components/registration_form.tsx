@@ -1,40 +1,47 @@
-import { FormProps } from './login_form';
+import { router, useForm } from '@inertiajs/react';
 
-export default function RegistrationForm({ setAuthMode }: FormProps) {
+export default function RegistrationForm() {
+  const { data, setData, post, processing, errors } = useForm({
+    email: '',
+    password: '',
+    password_confirmation: '',
+  });
+
+  function handleChange(e: { target: { id: any; value: any } }) {
+    const key = e.target.id;
+    const value = e.target.value;
+
+    setData((formData: any) => ({
+      ...formData,
+      [key]: value,
+    }));
+  }
+
+  function handleSubmit(e: { preventDefault: () => void }) {
+    e.preventDefault();
+    post('/register');
+  }
+
   return (
-    <form action="/register" method="POST">
-      <div className="w-full flex flex-row mb-5">
-        <input
-          type="text"
-          name="firstName"
-          id="firstName"
-          placeholder="FIRST NAME"
-          className="block w-1/2 me-2 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-slate-300 hover:border-slate-400 focus:bg-slate-200"
-        />
-        <input
-          type="text"
-          name="lastName"
-          id="lastName"
-          placeholder="LAST NAME"
-          className="block w-1/2 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-slate-300 hover:border-slate-400 focus:bg-slate-200"
-        />
-      </div>
-
+    <form onSubmit={handleSubmit}>
       <input
         type="email"
-        name="username"
-        id="username"
+        value={data.email}
+        id="email"
         placeholder="E-MAIL"
-        className="block w-full mt-3 mb-5 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-slate-300 hover:border-slate-400 focus:bg-slate-200"
+        onChange={handleChange}
+        className="block w-full mt-3 mb-5 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
       />
+      {errors.email && <p className="-mt-4 mb-3 text-purple-500 text-sm">{errors.email}</p>}
 
       <div className="w-full flex flex-row">
         <input
           type="password"
-          name="password"
+          value={data.password}
           id="password"
           placeholder="PASSWORD"
-          className="block w-11/12 mb-3 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-slate-300 hover:border-slate-400 focus:bg-slate-200"
+          onChange={handleChange}
+          className="block w-11/12 mb-3 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
         />
         <svg
           width="34"
@@ -65,16 +72,19 @@ export default function RegistrationForm({ setAuthMode }: FormProps) {
           </g>
         </svg>
       </div>
+      {errors.password && <p className="-mt-1 mb-3 text-purple-500 text-sm">{errors.password}</p>}
 
       <input
         type="password"
-        name="username"
-        id="re-pass"
+        value={data.password_confirmation}
+        id="password_confirmation"
         placeholder="RE-ENTER PASSWORD"
-        className="block w-full mt-3 mb-5 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-slate-300 hover:border-slate-400 focus:bg-slate-200"
+        onChange={handleChange}
+        className="block w-full mt-3 mb-5 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
       />
+      {errors.password_confirmation && <p>{errors.password_confirmation}</p>}
 
-      <p className="text-slate-500 mt-2 mb-6">
+      <p className="text-slate-500 mt-6 mb-6">
         <a href="/login" className="hover:text-violet-600">
           ALREADY HAVE AN ACCOUNT?
         </a>
@@ -84,6 +94,7 @@ export default function RegistrationForm({ setAuthMode }: FormProps) {
         <button
           type="submit"
           className="me-1 px-12 py-3 bg-violet-600 text-white text-xl rounded-lg border-none hover:bg-violet-800"
+          disabled={processing}
         >
           SIGN UP
         </button>
@@ -91,7 +102,7 @@ export default function RegistrationForm({ setAuthMode }: FormProps) {
           type="button"
           className="px-12 py-3 bg-white text-black text-xl rounded-lg border-none hover:bg-slate-200"
           id="login"
-          onClick={() => setAuthMode('login')}
+          onClick={() => router.replace('/login')}
         >
           LOGIN
         </button>

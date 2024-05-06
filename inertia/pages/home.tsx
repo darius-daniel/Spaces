@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 
 export default function Home() {
-  const handleClick = () => location.assign('/login');
+  const handleClick = () => location.assign('/register');
 
   return (
     <div className="page">

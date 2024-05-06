@@ -1,26 +1,47 @@
-import router from '@adonisjs/core/services/router';
+import { router, useForm } from '@inertiajs/react';
 
-export interface FormProps {
-  setAuthMode: React.Dispatch<React.SetStateAction<string>>;
-}
+export default function LoginForm() {
+  const { data, setData, post, processing, errors } = useForm({
+    email: '',
+    password: '',
+  });
 
-export default function LoginForm({ setAuthMode }: FormProps) {
+  function handleChange(e: { target: { id: any; value: any } }) {
+    const key = e.target.id;
+    const value = e.target.value;
+
+    setData((formData) => ({
+      ...formData,
+      [key]: value,
+    }));
+    post('/login');
+  }
+
+  function handleSubmit(e: { preventDefault: () => void }) {
+    e.preventDefault();
+  }
+
   return (
-    <form action="/login" method="POST">
+    <form onSubmit={handleSubmit}>
       <input
         type="email"
-        name="username"
-        id="username"
-        placeholder="E-MAIL"
-        className="block w-full mt-3 mb-5 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-slate-300 hover:border-slate-400 focus:bg-slate-200"
+        value={data.email}
+        id="email"
+        placeholder="E-MAIL/USERNAME"
+        onChange={handleChange}
+        className="block w-full mt-3 mb-5 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50 focus:border-violet-300"
       />
+
+      {errors.email && <p className="text-violet-500 text-sm -mt-4 mb-3">E-mail not found</p>}
+
       <div className="w-full flex flex-row">
         <input
           type="password"
-          name="password"
+          value={data.password}
           id="password"
           placeholder="PASSWORD"
-          className="block w-11/12 mb-3 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-slate-300 hover:border-slate-400 focus:bg-slate-200"
+          onChange={handleChange}
+          className="block w-11/12 mb-3 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
         />
         <svg
           width="34"
@@ -51,7 +72,10 @@ export default function LoginForm({ setAuthMode }: FormProps) {
           </g>
         </svg>
       </div>
-      <p className="text-slate-500 mt-2 mb-6">
+
+      {errors.password && <p className="text-violet-500 -mt-2 text-sm">{errors.password}</p>}
+
+      <p className="text-slate-500 mt-6 mb-6">
         <a href="/reset" className="hover:text-violet-600">
           FORGOT PASSWORD?
         </a>
@@ -60,6 +84,7 @@ export default function LoginForm({ setAuthMode }: FormProps) {
         <button
           type="submit"
           className="px-12 py-3 bg-violet-600 text-white text-xl rounded-lg border-none hover:bg-violet-800"
+          disabled={processing}
         >
           LOGIN
         </button>
@@ -67,7 +92,7 @@ export default function LoginForm({ setAuthMode }: FormProps) {
           type="button"
           className="ms-2 px-12 py-3 bg-white text-black text-xl rounded-lg border-none hover:bg-slate-200"
           id="register"
-          onClick={() => setAuthMode('register')}
+          onClick={() => router.replace('/register')}
         >
           SIGN UP
         </button>

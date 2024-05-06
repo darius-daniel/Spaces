@@ -1,10 +1,12 @@
-import { Head } from '@inertiajs/react';
-import { useState } from 'react';
+import { Head, usePage } from '@inertiajs/react';
+import { GrApple, GrGoogle } from 'react-icons/gr';
 import LoginForm from './components/login_form';
 import RegistrationForm from './components/registration_form';
 
 export default function Login() {
-  const [authMode, setAuthMode] = useState<string>('login');
+  const { url } = usePage();
+
+  console.log(url);
 
   return (
     <div className="page">
@@ -76,57 +78,33 @@ export default function Login() {
       </header>
       <section id="main" className="mt-8">
         <div className="auth-form text-black">
-          <h1 className="text-5xl mb-6">{authMode === 'login' ? 'Sign-in' : 'Sign-up'}</h1>
+          <h1 className="text-5xl mb-6">{url === '/login' ? 'Sign-in' : 'Sign-up'}</h1>
           <div id="apis" className="flex flex-row w-full">
             <div
               id="apple"
-              className="bg-slate-50 w-1/2 me-4 px-6 py-3 rounded-lg border border-3 border-slate-300 hover:bg-slate-100"
+              className="flex flex-row bg-slate-50 w-1/2 me-4 px-6 py-3 rounded-lg border border-3 border-violet-100 hover:bg-violet-50 hover:border-violet-300"
             >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="inline -mt-2"
-              >
-                <path
-                  d="M16.3149 6.43256C14.4308 6.43256 13.6345 7.33165 12.3223 7.33165C10.9769 7.33165 9.95075 6.4391 8.31799 6.4391C6.71981 6.4391 5.01556 7.41483 3.93329 9.07703C2.41362 11.421 2.67157 15.8356 5.13285 19.5965C6.01325 20.9428 7.18899 22.4526 8.73109 22.469H8.75913C10.0994 22.469 10.4975 21.5914 12.3419 21.5811H12.37C14.1868 21.5811 14.5513 22.4639 15.886 22.4639H15.914C17.4561 22.4475 18.6949 20.7746 19.5753 19.4334C20.209 18.4689 20.4445 17.9848 20.9305 16.8936C17.3701 15.5422 16.7981 10.4948 20.3193 8.55972C19.2445 7.21389 17.7341 6.43443 16.3103 6.43443L16.3149 6.43256Z"
-                  fill="#242424"
-                />
-                <path
-                  d="M15.9 1.53241C14.7785 1.60858 13.47 2.32262 12.7036 3.25489C12.0083 4.09977 11.4363 5.35308 11.6606 6.56854H11.7503C12.9448 6.56854 14.1672 5.84936 14.8813 4.92784C15.5691 4.05071 16.0906 2.80768 15.9 1.53241Z"
-                  fill="#242424"
-                />
-              </svg>
-              {authMode === 'login' ? 'LOG IN' : 'SIGN IN'} WITH APPLE
+              <span className="mt-0.5">
+                <GrApple />
+              </span>
+              <span className="block ms-1">
+                {url === '/login' ? 'LOG IN' : 'SIGN IN'} WITH APPLE
+              </span>
             </div>
             <div
               id="google"
-              className="bg-slate-50 w-1/2 px-6 py-3 rounded-lg border border-3 border-slate-300 hover:bg-slate-100"
+              className="flex flex-row bg-slate-50 w-1/2 px-6 py-3 rounded-lg border border-3 border-violet-100 hover:bg-violet-50 hover:border-violet-300"
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="inline -mt-1 me-1"
-              >
-                <path
-                  d="M19.7994 8.47175L19.6993 8.04719H10.4715V11.9528H15.985C15.4126 14.671 12.7564 16.1018 10.5866 16.1018C9.00794 16.1018 7.3438 15.4378 6.24234 14.3704C5.66121 13.7983 5.19864 13.1171 4.8811 12.366C4.56356 11.6148 4.3973 10.8084 4.39182 9.9929C4.39182 8.34779 5.13115 6.70225 6.20693 5.61982C7.28271 4.5374 8.90745 3.93178 10.5229 3.93178C12.373 3.93178 13.6989 4.91415 14.1947 5.36217L16.9701 2.60144C16.1559 1.88602 13.9193 0.083313 10.4335 0.083313C7.74401 0.083313 5.16523 1.1135 3.28018 2.99235C1.41992 4.84243 0.457031 7.51771 0.457031 9.99998C0.457031 12.4822 1.36813 15.0238 3.17083 16.8885C5.09706 18.8772 7.82503 19.9166 10.634 19.9166C13.1898 19.9166 15.6123 18.9152 17.3388 17.0984C19.0362 15.3098 19.9141 12.8351 19.9141 10.2408C19.9141 9.14865 19.8043 8.50008 19.7994 8.47175Z"
-                  fill="#242424"
-                />
-              </svg>
-              {authMode === 'login' ? 'LOG IN' : 'SIGN IN'} WITH GOOGLE
+              <span className="mt-0.5">
+                <GrGoogle />
+              </span>
+              <span className="block ms-1">
+                {url === '/login' ? 'LOG IN' : 'SIGN IN'} WITH GOOGLE
+              </span>
             </div>
           </div>
           <hr className="text-slate-400 my-6" />
-          {authMode === 'login' ? (
-            <LoginForm setAuthMode={setAuthMode} />
-          ) : (
-            <RegistrationForm setAuthMode={setAuthMode} />
-          )}
+          {url === '/login' ? <LoginForm /> : <RegistrationForm />}
         </div>
       </section>
     </div>
