@@ -22,6 +22,8 @@ router.post('/register', [UsersController, 'store']).as('register.submit');
 router.get('/login', [UsersController, 'create']).as('login.form');
 router.post('/login', [UsersController, 'store']).as('login.submit');
 
+router.on('/users').renderInertia('users');
+
 // router.get('/login', (ctx) => {
 //   ctx.inertia.render('login');
 // });
