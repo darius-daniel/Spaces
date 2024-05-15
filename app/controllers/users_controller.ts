@@ -18,16 +18,17 @@ export default class UsersController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, inertia }: HttpContext) {
     let data: { username?: string; email: string; password: string };
 
     if (request.url() === '/register') {
       data = await request.validateUsing(registrationFormValidator);
       try {
         const newUser = await User.create(data);
-        return response.send(newUser);
+        return response.redirect().toRoute(`/user/${newUser.id}`);
       } catch (error) {
-        return response.status(500);
+        console.error(error.message);
+        return inertia.render('errors/server_error', { error });
       }
     } else {
       data = await request.validateUsing(loginFormValidator);
@@ -35,11 +36,11 @@ export default class UsersController {
       try {
         let user = await User.findBy('email', data.email);
         if (user) {
-          user = await User.verifyCredentials(data.email, data.password);
-          return response.send(user);
+          user = await User.verifyCredentials(user.email, data.password);
+          return response.redirect().toPath(`/user/${user.id}`);
         } else response.abort(`$User with email {data.email} not found`);
       } catch (error) {
-        return response.status(500);
+        return inertia.render('errors/server_error', { error });
       }
     }
   }
@@ -47,7 +48,9 @@ export default class UsersController {
   /**
    * Show individual record
    */
-  // async show({ params }: HttpContext) {}
+  async show({ params, inertia }: HttpContext) {
+    return inertia.render('user', undefined, { id: params.id });
+  }
 
   /**
    * Edit individual record

@@ -6,8 +6,6 @@ import RegistrationForm from './components/registration_form';
 export default function Login() {
   const { url } = usePage();
 
-  console.log(url);
-
   return (
     <div className="page">
       <Head title="Spaces: Note Taking Web App" />

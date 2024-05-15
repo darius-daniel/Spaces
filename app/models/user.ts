@@ -1,8 +1,11 @@
 import { DateTime } from 'luxon';
 import hash from '@adonisjs/core/services/hash';
 import { compose } from '@adonisjs/core/helpers';
-import { BaseModel, column } from '@adonisjs/lucid/orm';
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm';
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid';
+import type { HasMany } from '@adonisjs/lucid/types/relations';
+import Folder from './folder.js';
+import Note from './note.js';
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -10,6 +13,12 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 });
 
 export default class User extends compose(BaseModel, AuthFinder) {
+  @hasMany(() => Folder)
+  declare folders: HasMany<typeof Folder>;
+
+  @hasMany(() => Note)
+  declare notes: HasMany<typeof Note>;
+
   @column({ isPrimary: true })
   declare id: number;
 

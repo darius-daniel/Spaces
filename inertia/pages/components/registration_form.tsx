@@ -102,7 +102,7 @@ export default function RegistrationForm() {
           type="button"
           className="px-12 py-3 bg-white text-black text-xl rounded-lg border-none hover:bg-slate-200"
           id="login"
-          onClick={() => router.replace('/login')}
+          onClick={() => router.get('/login')}
         >
           LOGIN
         </button>

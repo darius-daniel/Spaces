@@ -14,8 +14,7 @@ export const registrationFormValidator = vine.compile(
         const result = await db.from('users').select('id').where('email', value);
         return result.length ? false : true;
       }),
-    password: vine.string().ascii().minLength(8),
-    password_confirmation: vine.string().ascii().minLength(8).sameAs('password'),
+    password: vine.string().ascii().minLength(8).confirmed(),
   })
 );
 

@@ -1,49 +1,46 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { FaCalendarDays, FaFolder, FaFolderPlus, FaPlus, FaRegStar } from 'react-icons/fa6';
-import { PiNotepadFill } from 'react-icons/pi';
-
-import NoteCard from './components/note_card';
-import { BsArchive } from 'react-icons/bs';
 import { FiTrash } from 'react-icons/fi';
+import { BsArchive } from 'react-icons/bs';
+import NoteCard from './components/note_card';
+import { PiNotepadFill } from 'react-icons/pi';
+import { FaCalendarDays, FaFolder, FaPlus, FaRegStar } from 'react-icons/fa6';
+
+import Folders from './components/folders';
 import TextEditor from './components/text_editor';
+import { Folders as FolderType } from '../utils/interfaces';
 import { useForm } from '@inertiajs/react';
 
-export default function Users() {
+export default function User(props: { id: number }) {
   const [currentFolder, setCurrentFolder] = useState<string>('');
+  const [folders, setFolders] = useState<Array<FolderType>>([]);
   const [highlightedItem, setHighlightedItem] = useState<{ id: string; key: null | number }>({
     id: '',
     key: null,
   });
-  const { data, setData } = useForm({ folderName: '' });
-  const [waiting, setWaiting] = useState<boolean>(false);
+  const { data, get } = useForm();
+
+  console.log(data);
+
+  useEffect(() => {
+    get(`/folders/1`, { onSuccess: () => setFolders(JSON.parse(data)) });
+    // axiosInstance
+    //   .get(`/folders/${1}/`)
+    //   .then((response) => {
+    //     setFolders(response.data.folders);
+    //     console.log(response.data.folders);
+    //   })
+    //   .catch((error) => console.error(error.code));
+  }, [props.id]);
 
   const normalBg = 'flex flex-row ps-5 py-2 hover:bg-violet-500 hover:text-white';
   const highlightedBg = 'flex flex-row ps-5 py-2 bg-violet-50 hover:bg-violet-500 hover:text-white';
-
-  const folders = ['Personal', 'Work', 'Travel', 'Events', 'Finances'];
   const recentItems = ['Reflection on the Month of the June', 'Project proposal', 'Travel itenary'];
   const moreItems = [
     { name: 'Favorites', icon: <FaRegStar /> },
     { name: 'Trash', icon: <FiTrash /> },
     { name: 'Archived Notes', icon: <BsArchive /> },
   ];
-
-  function handleChange(e: { target: { id: any; value: any } }) {
-    const key = e.target.id;
-    const value = e.target.value;
-
-    setData((formData: any) => ({
-      ...formData,
-      [key]: value,
-    }));
-  }
-
-  function handleSubmit(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    folders.push(data.folderName);
-    setWaiting(false);
-  }
 
   return (
     <div className="flex flex-row text-slate-600">
@@ -75,48 +72,15 @@ export default function Users() {
           </div>
 
           {/* <Section name="folders" items={folders} setCurrentFolder={setCurrentFolder} /> */}
-          <div className="pt-5" id="folders">
-            <div className="flex justify-between">
-              <p className="text-sm my-0 py-1 ps-5">FOLDERS</p>
-              <span
-                className="mt-1 me-10 p-2 hover:bg-violet-200 rounded-md"
-                onClick={() => setWaiting(true)}
-              >
-                <FaFolderPlus />
-              </span>
-            </div>
-            {folders.map((folder, idx) => (
-              <div
-                className={
-                  folder === highlightedItem.id && idx === highlightedItem.key
-                    ? highlightedBg
-                    : normalBg
-                }
-                key={idx}
-                onClick={() => {
-                  setCurrentFolder(folder);
-                  setHighlightedItem({ id: folder, key: idx });
-                }}
-              >
-                <p>
-                  <FaFolder />
-                </p>{' '}
-                <p className="-mt-0.5 ms-2 me-0 text-md">{folder}</p>
-              </div>
-            ))}
-            {waiting && (
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  value={data.folderName}
-                  id="folderName"
-                  placeholder="FOLDER NAME"
-                  onChange={handleChange}
-                  className="block rounded-md mx-5 w-5/6 px-5 py-1 mt-1 border-3 text-md hover:bg-violet-50"
-                />
-              </form>
-            )}
-          </div>
+          <Folders
+            folders={folders}
+            userId={props.id}
+            currentFolder={{ name: currentFolder, setName: setCurrentFolder }}
+            selected={{
+              element: { id: highlightedItem.id, key: highlightedItem.key },
+              setElement: setHighlightedItem,
+            }}
+          />
 
           {/* <Section name="more" items={[]} setCurrentFolder={setCurrentFolder} /> */}
           <div className="pt-5" id="more">
@@ -132,6 +96,7 @@ export default function Users() {
                   setCurrentFolder(item.name);
                   setHighlightedItem({ id: item.name, key: idx });
                 }}
+                key={idx}
               >
                 <p>{item.icon}</p> <p className="-mt-1 ms-2 me-0 text-md">{item.name}</p>
               </div>

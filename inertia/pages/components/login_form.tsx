@@ -14,11 +14,11 @@ export default function LoginForm() {
       ...formData,
       [key]: value,
     }));
-    post('/login');
   }
 
-  function handleSubmit(e: { preventDefault: () => void }) {
+  async function handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
+    post('/login');
   }
 
   return (
@@ -92,7 +92,7 @@ export default function LoginForm() {
           type="button"
           className="ms-2 px-12 py-3 bg-white text-black text-xl rounded-lg border-none hover:bg-slate-200"
           id="register"
-          onClick={() => router.replace('/register')}
+          onClick={() => router.get('/register')}
         >
           SIGN UP
         </button>
