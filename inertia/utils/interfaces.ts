@@ -1,7 +1,8 @@
 import React from 'react';
+import { DateTime } from 'luxon';
 
 export interface FolderProps {
-  folders: Array<Folders>;
+  folders: Array<Folder>;
   userId: number;
   currentFolder: {
     name: string;
@@ -16,8 +17,24 @@ export interface FolderProps {
   };
 }
 
-export interface Folders {
-  name: string;
+export interface Folder {
   id: number;
   userId: number;
+  name: string;
+  createdAt: DateTime;
+  updatedAt: DateTime;
+}
+
+export interface Note {
+  id: number;
+  userId: number;
+  folderId: number;
+  title: string;
+  body: string;
+  createdAt: DateTime;
+  updatedAt: DateTime;
+}
+
+export interface LogoProps {
+  className: string;
 }

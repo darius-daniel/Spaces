@@ -7,6 +7,7 @@
 |
 */
 
+const NotesController = () => import('#controllers/notes_controller');
 import router from '@adonisjs/core/services/router';
 
 const FoldersController = () => import('#controllers/folders_controller');
@@ -18,18 +19,34 @@ router
   })
   .as('home');
 
-router.get('/register', [UsersController, 'create']).as('register.form');
-router.post('/register', [UsersController, 'store']).as('register.submit');
+router
+  .group(() => {
+    router.get('/register', [UsersController, 'create']).as('form');
+    router.post('/register', [UsersController, 'store']).as('submit');
+  })
+  .as('reg');
 
-router.get('/login', [UsersController, 'create']).as('login.form');
-router.post('/login', [UsersController, 'store']).as('login.submit');
+router
+  .group(() => {
+    router.get('/login', [UsersController, 'create']).as('form');
+    router.post('/login', [UsersController, 'store']).as('submit');
+  })
+  .as('login');
 
 router.get('/user/:id', [UsersController, 'show']);
 
-router.post('/folders/', [FoldersController, 'store']);
-router.get('/folders/:userId', [FoldersController, 'index']);
-router.get('/folders/:userId/:id', [FoldersController, 'show']);
+router
+  .group(() => {
+    router.post('', [FoldersController, 'store']);
+    router.get(':userId/:id', [FoldersController, 'show']);
+    router.get(':userId', [FoldersController, 'index']);
+  })
+  .prefix('folders');
 
-// router.get('/login', (ctx) => {
-//   ctx.inertia.render('login');
-// });
+router
+  .group(() => {
+    router.get(':userId/:folderId/:id', [NotesController, 'show']);
+    router.get(':userId/:folderId', [NotesController, 'index']);
+    router.get(':userId', [NotesController, 'index']);
+  })
+  .prefix('notes');

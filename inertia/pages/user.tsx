@@ -1,176 +1,66 @@
 import { useEffect, useState } from 'react';
+import { usePage } from '@inertiajs/react';
 
-import { FiTrash } from 'react-icons/fi';
-import { BsArchive } from 'react-icons/bs';
+import Logo from './components/logo';
+import axiosInstance from '~/utils/axios_instance';
+import { Folder, Note } from '~/utils/interfaces';
+
+import { FaPlus } from 'react-icons/fa';
+import Recents from './components/recents';
+import NoteFolders from './components/note_folders';
 import NoteCard from './components/note_card';
-import { PiNotepadFill } from 'react-icons/pi';
-import { FaCalendarDays, FaFolder, FaPlus, FaRegStar } from 'react-icons/fa6';
-
-import Folders from './components/folders';
-import TextEditor from './components/text_editor';
-import { Folders as FolderType } from '../utils/interfaces';
-import { useForm } from '@inertiajs/react';
 
 export default function User(props: { id: number }) {
-  const [currentFolder, setCurrentFolder] = useState<string>('');
-  const [folders, setFolders] = useState<Array<FolderType>>([]);
-  const [highlightedItem, setHighlightedItem] = useState<{ id: string; key: null | number }>({
-    id: '',
-    key: null,
-  });
-  const { data, get } = useForm();
-
-  console.log(data);
+  const recentNotes = ['Reflection on the Month of June', 'Project proposal', 'Travel itinerary'];
+  const [folders, setFolders] = useState<Folder[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [currentFolder, setCurrentFolder] = useState<Folder>();
+  const [currentNote, setCurrentNote] = useState<Note>();
+  const page = usePage();
 
   useEffect(() => {
-    get(`/folders/1`, { onSuccess: () => setFolders(JSON.parse(data)) });
-    // axiosInstance
-    //   .get(`/folders/${1}/`)
-    //   .then((response) => {
-    //     setFolders(response.data.folders);
-    //     console.log(response.data.folders);
-    //   })
-    //   .catch((error) => console.error(error.code));
-  }, [props.id]);
+    axiosInstance
+      .get(`/folders/${props.id || page.url.split('/')[2]}`)
+      .then((response) => setFolders(response.data))
+      .catch((error) => console.log(error.message));
+  }, []);
 
-  const normalBg = 'flex flex-row ps-5 py-2 hover:bg-violet-500 hover:text-white';
-  const highlightedBg = 'flex flex-row ps-5 py-2 bg-violet-50 hover:bg-violet-500 hover:text-white';
-  const recentItems = ['Reflection on the Month of the June', 'Project proposal', 'Travel itenary'];
-  const moreItems = [
-    { name: 'Favorites', icon: <FaRegStar /> },
-    { name: 'Trash', icon: <FiTrash /> },
-    { name: 'Archived Notes', icon: <BsArchive /> },
-  ];
+  useEffect(() => {
+    axiosInstance
+      .get(`/notes/${props.id || page.url.split('/')[2]}/${currentFolder?.id}`)
+      .then((response) => setNotes(response.data))
+      .catch((error) => console.error(error.message));
+  }, [currentFolder]);
 
   return (
     <div className="flex flex-row text-slate-600">
       <div className="flex flex-row w-1/2">
-        <div className="w-1/2 px-0 bg-violet-100" id="side">
-          <button
-            type="button"
-            className="flex bg-violet-300 hover:bg-violet-500 text-white font-bold text-md mx-auto mt-1 mb-5 w-5/6 py-1 rounded-md"
-          >
-            <span className="mx-auto flex flex-row">
-              <span className="mt-0.5">
-                <FaPlus />
-              </span>
-              <span className="ms-2">New Note</span>
+        <div className="w-1/2 px-0 bg-purple-100" id="side">
+          <Logo className="flex flex-row mt-0.5 ms-5" />
+          <button className="flex flex-row bg-purple-500 hover:bg-purple-600 justify-center text-white font-bold w-5/6 py-1 mt-5 mx-auto rounded-md">
+            <span className="mt-0.5 me-3">
+              <FaPlus />
             </span>
+            <span>New Note</span>
           </button>
-
-          {/* <Section name="recents" items={recentItems} setCurrentFolder={setCurrentFolder} /> */}
-          <div className="pt-5" id="recents">
-            <p className="text-sm my-0 py-1 ps-5">RECENTS</p>
-            {recentItems.map((item, idx) => (
-              <div className={'flex flex-row ps-5 py-2 ' + normalBg} key={idx + 1}>
-                <p>
-                  <PiNotepadFill />
-                </p>{' '}
-                <p className="-mt-1 ms-2 me-0 text-md">{item}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* <Section name="folders" items={folders} setCurrentFolder={setCurrentFolder} /> */}
-          <Folders
+          <Recents notes={recentNotes} />
+          <NoteFolders
             folders={folders}
-            userId={props.id}
-            currentFolder={{ name: currentFolder, setName: setCurrentFolder }}
-            selected={{
-              element: { id: highlightedItem.id, key: highlightedItem.key },
-              setElement: setHighlightedItem,
-            }}
+            currentFolder={{ attrs: currentFolder, setter: setCurrentFolder }}
           />
-
-          {/* <Section name="more" items={[]} setCurrentFolder={setCurrentFolder} /> */}
-          <div className="pt-5" id="more">
-            <p className="text-sm my-0 py-1 ps-5">MORE</p>
-            {moreItems.map((item, idx) => (
-              <div
-                className={
-                  item.name === highlightedItem.id && idx === highlightedItem.key
-                    ? highlightedBg
-                    : normalBg
-                }
-                onClick={() => {
-                  setCurrentFolder(item.name);
-                  setHighlightedItem({ id: item.name, key: idx });
-                }}
-                key={idx}
-              >
-                <p>{item.icon}</p> <p className="-mt-1 ms-2 me-0 text-md">{item.name}</p>
-              </div>
-            ))}
-          </div>
         </div>
-        {currentFolder && (
-          <div className="w-1/2 bg-violet-50" id="content">
-            <h1 className="px-4 pt-4">{currentFolder.toUpperCase()}</h1>
+        <div className="w-1/2 bg-purple-50" id="content">
+          <h2 className="mt-3 ms-5 text-lg font-bold">{currentFolder?.name}</h2>
+          {notes.map((note, idx) => (
             <NoteCard
-              note={{
-                title: 'My Goals for the Next Year',
-                body: 'As the year comes to a',
-                date: new Date(),
-              }}
+              key={idx}
+              note={note}
+              currentNote={{ attrs: currentNote, setter: setCurrentNote }}
             />
-            <NoteCard
-              note={{
-                title: 'My Goals for the Next Year',
-                body: 'As the year comes to a',
-                date: new Date(),
-              }}
-            />
-            <NoteCard
-              note={{
-                title: 'My Goals for the Next Year',
-                body: 'As the year comes to a',
-                date: new Date(),
-              }}
-            />
-            <NoteCard
-              note={{
-                title: 'My Goals for the Next Year',
-                body: 'As the year comes to a',
-                date: new Date(),
-              }}
-            />
-            <NoteCard
-              note={{
-                title: 'My Goals for the Next Year',
-                body: 'As the year comes to a',
-                date: new Date(),
-              }}
-            />
-            <NoteCard
-              note={{
-                title: 'My Goals for the Next Year',
-                body: 'As the year comes to a',
-                date: new Date(),
-              }}
-            />
-          </div>
-        )}
+          ))}
+        </div>
       </div>
-      <div className="w-1/2 text-sm px-6 bg-violet-100" id="editor">
-        <h1 className="pt-5 py-3 text-2xl font-bold">Reflection on the Month of June</h1>
-        <div className="flex flex-row">
-          <span className="me-6 mt-0.5">
-            <FaCalendarDays />
-          </span>
-          <span className="pe-28">Date</span>
-          <span>22/06/2022</span>
-        </div>
-        <hr className="text-slate-600 mt-2 mb-4" />
-        <div className="flex flex-row">
-          <span className="me-6 mt-0.5">
-            <FaFolder />
-          </span>
-          <span className="pe-28">Folder</span>
-          <span>{currentFolder}</span>
-        </div>
-        <hr className="text-slate-600 bg-inherit mt-1 mb-2" />
-        <TextEditor />
-      </div>
+      <div className="w-1/2 text-sm px-6 bg-purple-100" id="editor"></div>
     </div>
   );
 }
