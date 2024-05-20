@@ -5,10 +5,12 @@ import Logo from './components/logo';
 import axiosInstance from '~/utils/axios_instance';
 import { Folder, Note } from '~/utils/interfaces';
 
-import { FaPlus } from 'react-icons/fa';
+import { Plus } from 'lucide-react';
 import Recents from './components/recents';
 import NoteFolders from './components/note_folders';
 import NoteCard from './components/note_card';
+import EditorPanel from './components/editor_panel';
+// import Editor from './components/editor';
 
 export default function User(props: { id: number }) {
   const recentNotes = ['Reflection on the Month of June', 'Project proposal', 'Travel itinerary'];
@@ -33,14 +35,12 @@ export default function User(props: { id: number }) {
   }, [currentFolder]);
 
   return (
-    <div className="flex flex-row text-slate-600">
+    <div className="flex flex-row  bg-purple-200 text-slate-600">
       <div className="flex flex-row w-1/2">
-        <div className="w-1/2 px-0 bg-purple-100" id="side">
+        <div className="w-1/2 px-0" id="side">
           <Logo className="flex flex-row mt-0.5 ms-5" />
           <button className="flex flex-row bg-purple-500 hover:bg-purple-600 justify-center text-white font-bold w-5/6 py-1 mt-5 mx-auto rounded-md">
-            <span className="mt-0.5 me-3">
-              <FaPlus />
-            </span>
+            <Plus className="me-1" size={21} />
             <span>New Note</span>
           </button>
           <Recents notes={recentNotes} />
@@ -49,7 +49,7 @@ export default function User(props: { id: number }) {
             currentFolder={{ attrs: currentFolder, setter: setCurrentFolder }}
           />
         </div>
-        <div className="w-1/2 bg-purple-50" id="content">
+        <div className="w-1/2 bg-purple-100" id="content">
           <h2 className="mt-3 ms-5 text-lg font-bold">{currentFolder?.name}</h2>
           {notes.map((note, idx) => (
             <NoteCard
@@ -60,7 +60,14 @@ export default function User(props: { id: number }) {
           ))}
         </div>
       </div>
-      <div className="w-1/2 text-sm px-6 bg-purple-100" id="editor"></div>
+      {currentFolder && currentNote && (
+        <div className="w-1/2 text-sm px-6 pt-10" id="editor">
+          <EditorPanel
+            currentNote={{ attrs: currentNote, setter: setCurrentNote }}
+            currentFolder={{ attrs: currentFolder, setter: setCurrentFolder }}
+          />
+        </div>
+      )}
     </div>
   );
 }

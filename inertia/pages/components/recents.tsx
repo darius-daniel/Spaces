@@ -1,4 +1,4 @@
-import { PiNotepad } from 'react-icons/pi';
+import { NotepadText } from 'lucide-react';
 
 interface Props {
   notes: string[];
@@ -13,10 +13,7 @@ export default function Recents({ notes }: Props) {
           className="flex flex-row mt-1 ps-7 py-1 text-md hover:text-slate-800 hover:bg-purple-300"
           key={idx}
         >
-          <span className="mt-1 me-3">
-            <PiNotepad />
-          </span>
-          <span>{note}</span>
+          <NotepadText className="pe-1" /> {note}
         </div>
       ))}
     </div>

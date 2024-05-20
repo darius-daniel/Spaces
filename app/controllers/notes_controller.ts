@@ -1,3 +1,4 @@
+import Folder from '#models/folder';
 import Note from '#models/note';
 import type { HttpContext } from '@adonisjs/core/http';
 
@@ -18,7 +19,15 @@ export default class NotesController {
   /**
    * Handle form submission for the create action
    */
-  // async store({ request }: HttpContext) {}
+  async store({ request, response }: HttpContext) {
+    const { folderId, title, body } = request.body();
+    try {
+      const folder = await Folder.findOrFail(folderId);
+      return await folder.related('notes').create({ title, body });
+    } catch (error) {
+      return response.status(500).send(error);
+    }
+  }
 
   /**
    * Show individual record

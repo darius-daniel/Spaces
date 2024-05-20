@@ -26,7 +26,7 @@ export interface Folder {
 }
 
 export interface Note {
-  id: number;
+  id?: number;
   userId: number;
   folderId: number;
   title: string;

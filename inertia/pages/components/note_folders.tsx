@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaRegFolder } from 'react-icons/fa';
+import { Folder as FolderIcon } from 'lucide-react';
 import { Folder } from '~/utils/interfaces';
 
 interface Props {
@@ -28,10 +28,7 @@ export default function NoteFolders({ folders, currentFolder }: Props) {
             currentFolder.attrs?.name !== folder.name && currentFolder.setter(folder);
           }}
         >
-          <span className="mt-0.5 me-3">
-            <FaRegFolder />
-          </span>
-          <span>{folder.name}</span>{' '}
+          <FolderIcon className="mt-0.5 me-2" size={20} /> {folder.name}
         </div>
       ))}
     </div>
