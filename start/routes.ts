@@ -10,7 +10,6 @@
 const NotesController = () => import('#controllers/notes_controller');
 import router from '@adonisjs/core/services/router';
 
-const FoldersController = () => import('#controllers/folders_controller');
 const UsersController = () => import('#controllers/users_controller');
 
 router
@@ -37,16 +36,7 @@ router.get('/user/:id', [UsersController, 'show']);
 
 router
   .group(() => {
-    router.post('', [FoldersController, 'store']);
-    router.get(':userId/:id', [FoldersController, 'show']);
-    router.get(':userId', [FoldersController, 'index']);
-  })
-  .prefix('folders');
-
-router
-  .group(() => {
-    router.get(':userId/:folderId/:id', [NotesController, 'show']);
-    router.get(':userId/:folderId', [NotesController, 'index']);
+    router.get(':userId/:id', [NotesController, 'show']);
     router.get(':userId', [NotesController, 'index']);
   })
   .prefix('notes');

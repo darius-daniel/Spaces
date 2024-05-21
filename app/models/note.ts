@@ -9,9 +9,6 @@ export default class Note extends BaseModel {
   declare userId: number;
 
   @column()
-  declare folderId: number;
-
-  @column()
   declare title: string;
 
   @column()
