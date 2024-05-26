@@ -12,7 +12,7 @@ export default class Note extends BaseModel {
   declare title: string;
 
   @column()
-  declare body: string | null;
+  declare content: string;
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime;

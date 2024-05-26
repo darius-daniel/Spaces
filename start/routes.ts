@@ -32,11 +32,19 @@ router
   })
   .as('login');
 
-router.get('/user/:id', [UsersController, 'show']);
-
 router
   .group(() => {
-    router.get(':userId/:id', [NotesController, 'show']);
-    router.get(':userId', [NotesController, 'index']);
+    router.group(() => {
+      router
+        .group(() => {
+          router.post('create', [NotesController, 'store']);
+          router.put('update', [NotesController, 'update']);
+          router.delete('delete/:noteId', [NotesController, 'destroy']);
+          router.get('/:noteId', [NotesController, 'show']);
+          router.get('', [NotesController, 'index']);
+        })
+        .prefix('notes');
+      router.get('', [UsersController, 'show']);
+    });
   })
-  .prefix('notes');
+  .prefix('user/:id');

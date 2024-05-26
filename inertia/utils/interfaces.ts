@@ -3,11 +3,19 @@ import { DateTime } from 'luxon';
 export interface Note {
   id?: number;
   userId: number;
-  folderId: number;
   title: string;
-  body: string;
+  content: string;
   createdAt?: DateTime;
   updatedAt?: DateTime;
+}
+
+export interface User {
+  id: number;
+  email: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  password?: string;
 }
 
 export interface LogoProps {
