@@ -1,7 +1,6 @@
 import { Head, usePage } from '@inertiajs/react';
-import { GrApple, GrGoogle } from 'react-icons/gr';
-import LoginForm from './components/login_form';
-import RegistrationForm from './components/registration_form';
+import LoginForm from './components/forms/login';
+import RegistrationForm from './components/forms/registration';
 
 export default function Login() {
   const { url } = usePage();
@@ -9,7 +8,7 @@ export default function Login() {
   return (
     <div className="page">
       <Head title="Spaces: Note Taking Web App" />
-      <header id="logo" className="pt-5 mb-0 flex flex-row" onClick={() => location.assign('/')}>
+      <header id="logo" className="pt-5 flex flex-row" onClick={() => location.assign('/')}>
         <svg
           width="57"
           height="56"
@@ -76,32 +75,7 @@ export default function Login() {
       </header>
       <section id="main" className="mt-8">
         <div className="auth-form text-black">
-          <h1 className="text-5xl mb-6">{url === '/login' ? 'Sign-in' : 'Sign-up'}</h1>
-          <div id="apis" className="flex flex-row w-full">
-            <div
-              id="apple"
-              className="flex flex-row bg-slate-50 w-1/2 me-4 px-6 py-3 rounded-lg border border-3 border-violet-100 hover:bg-violet-50 hover:border-violet-300"
-            >
-              <span className="mt-0.5">
-                <GrApple />
-              </span>
-              <span className="block ms-1">
-                {url === '/login' ? 'LOG IN' : 'SIGN IN'} WITH APPLE
-              </span>
-            </div>
-            <div
-              id="google"
-              className="flex flex-row bg-slate-50 w-1/2 px-6 py-3 rounded-lg border border-3 border-violet-100 hover:bg-violet-50 hover:border-violet-300"
-            >
-              <span className="mt-0.5">
-                <GrGoogle />
-              </span>
-              <span className="block ms-1">
-                {url === '/login' ? 'LOG IN' : 'SIGN IN'} WITH GOOGLE
-              </span>
-            </div>
-          </div>
-          <hr className="text-slate-400 my-6" />
+          <h1 className="text-5xl mb-12">{url === '/login' ? 'Sign-in' : 'Sign-up'}</h1>
           {url === '/login' ? <LoginForm /> : <RegistrationForm />}
         </div>
       </section>

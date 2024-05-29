@@ -47,7 +47,7 @@ export default function Editor({ note }: Props) {
         Add a Note
         <button
           type="submit"
-          className="bg-purple-800 hover:bg-purple-950 disabled:bg-purple-950 text-white px-5 py-2 me-5 rounded-xl"
+          className="bg-purple-800 hover:bg-purple-900 disabled:bg-purple-900 text-white px-5 py-2 me-5 rounded-xl"
           disabled={!note.attrs.title}
         >
           <Save />

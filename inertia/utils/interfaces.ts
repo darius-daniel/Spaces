@@ -12,6 +12,7 @@ export interface Note {
 export interface User {
   id: number;
   email: string;
+  notes: Array<Note>;
   username: string;
   firstName: string;
   lastName: string;

@@ -32,7 +32,7 @@ export default function LoginForm() {
         className="block w-full mt-3 mb-5 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50 focus:border-violet-300"
       />
 
-      {errors.email && <p className="text-violet-500 text-sm -mt-4 mb-3">E-mail not found</p>}
+      {errors.email && <p className="text-pink-500 text-sm -mt-4 mb-3">E-mail not found</p>}
 
       <div className="w-full flex flex-row">
         <input
@@ -73,7 +73,7 @@ export default function LoginForm() {
         </svg>
       </div>
 
-      {errors.password && <p className="text-violet-500 -mt-2 text-sm">{errors.password}</p>}
+      {errors.password && <p className="text-pink-500 -mt-2 text-sm">{errors.password}</p>}
 
       <p className="text-slate-500 mt-6 mb-6">
         <a href="/reset" className="hover:text-violet-600">
