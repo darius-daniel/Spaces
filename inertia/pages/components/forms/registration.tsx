@@ -85,7 +85,7 @@ export default function RegistrationForm() {
       {errors.password_confirmation && <p>{errors.password_confirmation}</p>}
 
       <p className="text-slate-500 mt-6 mb-6">
-        <a href="/login" className="hover:text-violet-600">
+        <a href="/login" className="hover:text-purple-800">
           ALREADY HAVE AN ACCOUNT?
         </a>
       </p>
@@ -93,14 +93,14 @@ export default function RegistrationForm() {
       <div className="btns w-full text-center">
         <button
           type="submit"
-          className="me-1 px-12 py-3 bg-violet-600 text-white text-xl rounded-lg border-none hover:bg-violet-800"
+          className="me-1 px-12 py-3 bg-purple-800 text-white text-xl rounded-lg border-none hover:bg-purple-900"
           disabled={processing}
         >
           SIGN UP
         </button>
         <button
           type="button"
-          className="px-12 py-3 bg-white text-black text-xl rounded-lg border-none hover:bg-slate-200"
+          className="px-12 py-3 bg-white text-purple-800 text-xl rounded-lg border-none hover:bg-purple-200"
           id="login"
           onClick={() => router.get('/login')}
         >

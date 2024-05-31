@@ -41,48 +41,21 @@ export default class UsersController {
    * Show individual record
    */
   async show({ auth, params, inertia }: HttpContext) {
-    await auth.authenticate();
-    return inertia.render('user', { ...auth.user, password: '' }, { id: params.id });
+    if (auth.isAuthenticated === false) {
+      await auth.authenticate();
+    }
+
+    if (auth.user) {
+      auth.user.$setAttribute('password', '');
+    }
+
+    return inertia.render('user', { user: { ...auth.user } }, { id: params.id });
   }
 
   /**
    * Edit individual record
    */
-  async edit({ params, response, request }: HttpContext) {
-    const { firstName, lastName, username, email, password, currentPassword } = request.body();
-    const user = await User.findOrFail(params.id);
-
-    if (firstName || lastName) {
-      const data = await request.validateUsing(fullNameUpdateValidator);
-      if (firstName) user.firstName = data.firstName;
-      if (lastName) user.lastName = data.lastName;
-
-      await user.save();
-    } else if (username) {
-      const data = await request.validateUsing(userNameUpdateValidator);
-
-      user.username = data.username;
-      await user.save();
-    } else if (email && password) {
-      const data = await request.validateUsing(emailUpdateValidator);
-      if (password) {
-        const verifiedUser = await User.verifyCredentials(user.email, data.password);
-
-        verifiedUser.email = data.email;
-        await verifiedUser.save();
-      }
-    } else if (password && currentPassword) {
-      const data = await request.validateUsing(passwordUpdateValidator);
-      if (currentPassword) {
-        const verifiedUser = await User.verifyCredentials(user.email, data.currentPassword);
-
-        verifiedUser.password = data.password;
-        await verifiedUser.save();
-      }
-    }
-    return response.accepted(true);
-  }
-
+  // async edit({ params, response, request }: HttpContext) { }
   /**
    * Handle form submission for the edit action
    */

@@ -7,12 +7,13 @@
 |
 */
 
-const NotesController = () => import('#controllers/notes_controller');
-const SessionController = () => import('#controllers/session_controller');
-import router from '@adonisjs/core/services/router';
 import { middleware } from '#start/kernel';
+import router from '@adonisjs/core/services/router';
 
 const UsersController = () => import('#controllers/users_controller');
+const NotesController = () => import('#controllers/notes_controller');
+const SessionController = () => import('#controllers/session_controller');
+const ProfileController = () => import('#controllers/profile_controller');
 
 router
   .get('/', (ctx) => {
@@ -43,12 +44,13 @@ router
           router.post('create', [NotesController, 'store']).use(middleware.auth());
           router.put('update', [NotesController, 'update']).use(middleware.auth());
           router.delete('delete/:noteId', [NotesController, 'destroy']).use(middleware.auth());
-          router.get('/:noteId', [NotesController, 'show']).use(middleware.auth());
+          router.get(':noteId', [NotesController, 'show']).use(middleware.auth());
           router.get('', [NotesController, 'index']).use(middleware.auth());
         })
         .prefix('notes');
+      router.get('profile', [ProfileController, 'show']).use(middleware.auth());
+      router.patch('/profile', [ProfileController, 'update']).use(middleware.auth());
       router.get('', [UsersController, 'show']).use(middleware.auth());
-      router.patch('', [UsersController, 'edit']).use(middleware.auth());
     });
   })
   .prefix('user/:id');

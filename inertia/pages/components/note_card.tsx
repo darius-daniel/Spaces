@@ -1,23 +1,21 @@
-import { DateTime } from 'luxon';
-
 import { Note } from '~/utils/interfaces';
 
 interface NoteCardProps {
   note: Note;
   currentNote:
-    | {
-        attrs: Note | undefined;
-        setter: {
-          note: React.Dispatch<React.SetStateAction<Note>>;
-          showAll: React.Dispatch<React.SetStateAction<boolean>>;
-        };
-      }
-    | undefined;
+  | {
+    attrs: Note | undefined;
+    setter: {
+      note: React.Dispatch<React.SetStateAction<Note>>;
+      showAll: React.Dispatch<React.SetStateAction<boolean>>;
+    };
+  }
+  | undefined;
 }
 
 export default function NoteCard({ note, currentNote }: NoteCardProps) {
-  const normalBg = 'bg-purple-50 hover:bg-purple-300 hover:text-slate-700';
-  const highlight = 'bg-purple-200 hover:bg-purple-300 hover:text-slate-700';
+  const normalBg = 'bg-purple-50 hover:bg-purple-200 hover:text-slate-700';
+  const highlight = 'bg-purple-100 hover:bg-purple-200 hover:text-slate-700';
   const styling = ' shadow-xl text-sm p-5 pt-2 rounded-xl';
 
   const handleRightClick = (event: { preventDefault: Function }) => {

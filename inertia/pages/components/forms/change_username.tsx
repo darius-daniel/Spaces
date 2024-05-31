@@ -1,14 +1,13 @@
-import { usePage, useForm } from '@inertiajs/react';
-import { User } from '~/utils/interfaces';
+import axiosInstance from '#utils/axios_instance';
+import { useForm } from '@inertiajs/react';
+import { FormProps } from '~/utils/interfaces';
 
-export default function UsernameChangeForm() {
-  const { props } = usePage();
-  const user: any & User = props.$attributes;
-  const { data, setData, patch, errors, processing } = useForm({
-    username: user.username,
+export default function UsernameChangeForm({ errors, user }: FormProps) {
+  const { data, setData } = useForm({
+    username: user?.username,
   });
 
-  const errorStyles = 'ps-1 -mt-4 mb-3 text-pink-500 text-sm';
+  const errorStyles = 'ps-1 text-pink-700 text-sm';
   const labelStyles = 'ps-1 text-purple-800 text-sm';
 
   function handleChange(event: { target: { id: any; value: any } }) {
@@ -20,9 +19,13 @@ export default function UsernameChangeForm() {
     }));
   }
 
-  function handleSubmit(e: { preventDefault: () => void }) {
+  async function handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
-    patch(`/user/${user.id}`);
+    try {
+      await axiosInstance.patch(`/user/${user.id}/profile`, data);
+    } catch (error) {
+      console.error(error.message);
+    }
   }
 
   return (
@@ -41,14 +44,13 @@ export default function UsernameChangeForm() {
           id="username"
           placeholder="Username"
           onChange={handleChange}
-          className="block w-2/3 mb-5 py-2 ps-5 bg-slate-50 text-sm placeholder:text-sm rounded-lg border border-3 border-purple-100 hover:border-purple-300 focus:bg-purple-50"
+          className="block w-2/3 mb-1 py-2 ps-5 bg-slate-50 text-sm placeholder:text-sm rounded-lg border border-3 border-purple-100 hover:border-purple-300 focus:bg-purple-50"
         />
-        {errors.username && <p className={errorStyles}>{errors.username}</p>}
+        <p className={errors?.username ? errorStyles : errorStyles + ' mb-4'}>{errors?.username}</p>
         <div className="btns w-2/3 text-right">
           <button
             type="submit"
-            className="me-1 px-6 py-2 bg-violet-600 text-white text-md rounded-xl border-none hover:bg-violet-800"
-            disabled={processing}
+            className="me-1 px-6 py-2 bg-purple-800 hover:bg-purple-900 text-white text-md rounded-xl border-none"
           >
             Update
           </button>

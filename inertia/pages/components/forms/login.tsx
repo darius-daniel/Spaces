@@ -83,14 +83,14 @@ export default function LoginForm() {
       <div className="btns w-full text-center">
         <button
           type="submit"
-          className="px-12 py-3 bg-violet-600 text-white text-xl rounded-lg border-none hover:bg-violet-800"
+          className="px-12 py-3 bg-purple-800 text-white text-xl rounded-lg border-none hover:bg-purple-900"
           disabled={processing}
         >
           LOGIN
         </button>
         <button
           type="button"
-          className="ms-2 px-12 py-3 bg-white text-black text-xl rounded-lg border-none hover:bg-slate-200"
+          className="ms-2 px-12 py-3 bg-white text-purple-800 text-xl rounded-lg border-none hover:bg-purple-200"
           id="register"
           onClick={() => router.get('/register')}
         >

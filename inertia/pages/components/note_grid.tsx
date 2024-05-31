@@ -1,4 +1,3 @@
-import { NotepadText } from 'lucide-react';
 import { Note } from '~/utils/interfaces';
 import NoteCard from './note_card';
 

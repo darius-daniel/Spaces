@@ -1,3 +1,4 @@
+import { PageProps } from '@inertiajs/inertia';
 import { DateTime } from 'luxon';
 
 export interface Note {
@@ -21,4 +22,17 @@ export interface User {
 
 export interface LogoProps {
   className: string;
+}
+
+export interface FormProps {
+  errors: {
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    password?: string;
+    currentPassword?: string;
+    password_confirmation?: string;
+  };
+  user: User;
 }

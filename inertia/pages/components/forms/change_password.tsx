@@ -1,16 +1,15 @@
-import { usePage, useForm } from '@inertiajs/react';
-import { User } from '~/utils/interfaces';
+import axiosInstance from '#utils/axios_instance';
+import { useForm } from '@inertiajs/react';
+import { FormProps } from '~/utils/interfaces';
 
-export default function PasswordChangeForm() {
-  const { props } = usePage();
-  const user: any & User = props.$attributes;
-  const { data, setData, patch, errors, processing } = useForm({
+export default function PasswordChangeForm({ errors, user }: FormProps) {
+  const { data, setData } = useForm({
     password: '',
     password_confirmation: '',
     currentPassword: '',
   });
 
-  const errorStyles = 'ps-1 -mt-4 mb-3 text-pink-500 text-sm';
+  const errorStyles = 'ps-1 text-pink-700 text-sm';
   const labelStyles = 'ps-1 text-purple-800 text-sm';
 
   function handleChange(event: { target: { id: any; value: any } }) {
@@ -22,9 +21,13 @@ export default function PasswordChangeForm() {
     }));
   }
 
-  function handleSubmit(e: { preventDefault: () => void }) {
+  async function handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
-    patch(`/user/${user.id}`);
+    try {
+      await axiosInstance.patch(`/user/${user.id}/profile`, data);
+    } catch (error) {
+      console.error(error.message);
+    }
   }
 
   return (
@@ -37,32 +40,32 @@ export default function PasswordChangeForm() {
 
         <div className="w-2/3">
           <label htmlFor="password" className={labelStyles}>
-            Password
+            New Password
           </label>
           <div className="w-full flex flex-row">
             <input
               type="password"
               value={data.password}
               id="password2"
-              placeholder="Password"
+              placeholder="Enter your new password"
               onChange={handleChange}
-              className="block w-2/3 mb-2 py-2 ps-5 bg-slate-50 text-sm placeholder:text-sm rounded-lg border border-3 border-viole-100 hover:border-viole-300 focus:bg-viole-50"
+              className="block w-2/3 mb-1 py-2 ps-5 bg-slate-50 text-sm placeholder:text-sm rounded-lg border border-3 border-viole-100 hover:border-viole-300 focus:bg-viole-50"
             />
           </div>
-          {errors.password && <p className={errorStyles}>{errors.password}</p>}
+          <p className={errorStyles}>{errors?.password}</p>
 
           <label htmlFor="password_confirmation" className={labelStyles}>
             Re-enter Password
           </label>
           <input
             type="password"
-            value={data.currentPassword}
+            value={data.password_confirmation}
             id="password_confirmation"
             placeholder="Re-enter Password"
             onChange={handleChange}
-            className="block w-2/3 mb-2 py-2 ps-5 bg-slate-50 text-sm placeholder:text-sm rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
+            className="block w-2/3 mb-1 py-2 ps-5 bg-slate-50 text-sm placeholder:text-sm rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
           />
-          {errors.password_confirmation && <p>{errors.password_confirmation}</p>}
+          <p className={errorStyles}>{errors?.password_confirmation}</p>
 
           <label htmlFor="currentPassword" className={labelStyles}>
             Enter current password
@@ -73,15 +76,15 @@ export default function PasswordChangeForm() {
             id="currentPassword"
             placeholder="Enter current password"
             onChange={handleChange}
-            className="block w-2/3 mb-5 py-2 ps-5 bg-slate-50 text-sm placeholder:text-sm rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
+            required={true}
+            className="block w-2/3 mb-1 py-2 ps-5 bg-slate-50 text-sm placeholder:text-sm rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
           />
-          {errors.currentPassword && <p>{errors.currentPassword}</p>}
+          <p className={errors?.currentPassword ? errorStyles : errorStyles + ' mb-4'}>{errors?.currentPassword}</p>
 
           <div className="btns w-2/3 text-right">
             <button
               type="submit"
-              className="me-1 px-6 py-2 bg-violet-600 text-white text-md rounded-xl border-none hover:bg-violet-800"
-              disabled={processing}
+              className="me-1 px-6 py-2 bg-purple-800 text-white text-md rounded-xl border-none hover:bg-purple-900"
             >
               Update
             </button>
