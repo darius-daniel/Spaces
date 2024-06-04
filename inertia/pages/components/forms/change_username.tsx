@@ -1,9 +1,9 @@
-import axiosInstance from '#utils/axios_instance';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { FormProps } from '~/utils/interfaces';
 
-export default function UsernameChangeForm({ errors, user }: FormProps) {
-  const { data, setData } = useForm({
+export default function UsernameChangeForm({ user }: FormProps) {
+  const { url } = usePage();
+  const { data, setData, errors, patch } = useForm({
     username: user?.username,
   });
 
@@ -21,11 +21,7 @@ export default function UsernameChangeForm({ errors, user }: FormProps) {
 
   async function handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
-    try {
-      await axiosInstance.patch(`/user/${user.id}/profile`, data);
-    } catch (error) {
-      console.error(error.message);
-    }
+    patch(`${url}`);
   }
 
   return (

@@ -1,20 +1,21 @@
-import app from '@adonisjs/core/services/app'
-import { HttpContext, ExceptionHandler } from '@adonisjs/core/http'
-import type { StatusPageRange, StatusPageRenderer } from '@adonisjs/core/types/http'
+import app from '@adonisjs/core/services/app';
+import { errors } from '@adonisjs/auth';
+import { HttpContext, ExceptionHandler } from '@adonisjs/core/http';
+import type { StatusPageRange, StatusPageRenderer } from '@adonisjs/core/types/http';
 
 export default class HttpExceptionHandler extends ExceptionHandler {
   /**
    * In debug mode, the exception handler will display verbose errors
    * with pretty printed stack traces.
    */
-  protected debug = !app.inProduction
+  protected debug = !app.inProduction;
 
   /**
    * Status pages are used to display a custom HTML pages for certain error
    * codes. You might want to enable them in production only, but feel
    * free to enable them in development as well.
    */
-  protected renderStatusPages = app.inProduction
+  protected renderStatusPages = app.inProduction;
 
   /**
    * Status pages is a collection of error code range and a callback
@@ -23,14 +24,17 @@ export default class HttpExceptionHandler extends ExceptionHandler {
   protected statusPages: Record<StatusPageRange, StatusPageRenderer> = {
     '404': (error, { inertia }) => inertia.render('errors/not_found', { error }),
     '500..599': (error, { inertia }) => inertia.render('errors/server_error', { error }),
-  }
+  };
 
   /**
    * The method is used for handling errors and returning
    * response to the client
    */
   async handle(error: unknown, ctx: HttpContext) {
-    return super.handle(error, ctx)
+    if (error instanceof errors.E_INVALID_CREDENTIALS) {
+      return ctx.response.status(error.status).send(error.getResponseMessage(error, ctx));
+    }
+    return super.handle(error, ctx);
   }
 
   /**
@@ -40,6 +44,6 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * @note You should not attempt to send a response from this method.
    */
   async report(error: unknown, ctx: HttpContext) {
-    return super.report(error, ctx)
+    return super.report(error, ctx);
   }
 }

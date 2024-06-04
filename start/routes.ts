@@ -49,7 +49,7 @@ router
         })
         .prefix('notes');
       router.get('profile', [ProfileController, 'show']).use(middleware.auth());
-      router.patch('/profile', [ProfileController, 'update']).use(middleware.auth());
+      router.patch('profile', [ProfileController, 'update']).use(middleware.auth());
       router.get('', [UsersController, 'show']).use(middleware.auth());
     });
   })

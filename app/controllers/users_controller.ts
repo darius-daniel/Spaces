@@ -1,12 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http';
 import User from '#models/user';
-import {
-  emailUpdateValidator,
-  fullNameUpdateValidator,
-  passwordUpdateValidator,
-  registrationFormValidator,
-  userNameUpdateValidator,
-} from '#validators/user';
+import { registrationFormValidator } from '#validators/user';
 
 export default class UsersController {
   /**
@@ -49,7 +43,7 @@ export default class UsersController {
       auth.user.$setAttribute('password', '');
     }
 
-    return inertia.render('user', { user: { ...auth.user } }, { id: params.id });
+    return inertia.render('user', { user: { ...auth.user?.$attributes } }, { id: params.id });
   }
 
   /**

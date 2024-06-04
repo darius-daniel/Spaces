@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { router, usePage } from '@inertiajs/react';
 import { ArrowLeftCircle } from 'lucide-react';
 
@@ -18,7 +17,7 @@ export default function UserUpdateForm() {
       <aside className="w-1/4 text-start min-h-screen max-h-screen overflow-auto">
         <Logo className="flex flex-row max-h-full mt-0.5" />
         <ArrowLeftCircle
-          className={"mt-2 ms-2 p-2 text-purple-800 hover:bg-purple-900 hover:text-white rounded-xl"}
+          className="mt-2 ms-2 p-2 text-purple-800 hover:bg-purple-900 hover:text-white rounded-xl"
           size={40}
           onClick={() => router.get(`/user/${user.id}`)}
         />
@@ -41,13 +40,13 @@ export default function UserUpdateForm() {
       <div className="w-3/4 mx-auto px-10 pb-10 bg-purple-100 min-h-screen max-h-screen overflow-auto">
         <h1 className="mt-6 text-2xl text-purple-800 font-bold">Update User Information</h1>
         <hr className="bg-purple-300 h-0.5 my-6" />
-        <NameChangeForm errors={props.errors} user={user} />
+        <NameChangeForm user={user} />
         <hr className="bg-purple-300 h-0.5 my-6" />
-        <UsernameChangeForm errors={props.errors} user={user} />
+        <UsernameChangeForm user={user} />
         <hr className="bg-purple-300 h-0.5 my-6" />
-        <EmailChangeForm errors={props.errors} user={user} />
+        <EmailChangeForm user={user} />
         <hr className="bg-purple-300 h-0.5 my-6" />
-        <PasswordChangeForm errors={props.errors} user={user} />
+        <PasswordChangeForm user={user} />
       </div>
     </div>
   );

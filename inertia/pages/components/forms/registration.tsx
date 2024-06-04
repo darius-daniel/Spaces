@@ -32,7 +32,7 @@ export default function RegistrationForm() {
         onChange={handleChange}
         className="block w-full mt-3 mb-5 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
       />
-      {errors.email && <p className="-mt-4 mb-3 text-pink-500 text-sm">{errors.email}</p>}
+      <p className="-mt-4 mb-3 text-pink-500 text-sm">{errors?.email}</p>
 
       <div className="w-full flex flex-row">
         <input
@@ -72,7 +72,7 @@ export default function RegistrationForm() {
           </g>
         </svg>
       </div>
-      {errors.password && <p className="-mt-1 mb-3 text-pink-500 text-sm">{errors.password}</p>}
+      <p className="-mt-1 mb-3 text-pink-500 text-sm">{errors?.password}</p>
 
       <input
         type="password"
@@ -82,7 +82,7 @@ export default function RegistrationForm() {
         onChange={handleChange}
         className="block w-full mt-3 mb-5 py-2 ps-5 bg-slate-50 rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
       />
-      {errors.password_confirmation && <p>{errors.password_confirmation}</p>}
+      <p>{errors?.password_confirmation}</p>
 
       <p className="text-slate-500 mt-6 mb-6">
         <a href="/login" className="hover:text-purple-800">

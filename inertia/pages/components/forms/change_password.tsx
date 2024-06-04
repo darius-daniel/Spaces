@@ -1,9 +1,9 @@
-import axiosInstance from '#utils/axios_instance';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { FormProps } from '~/utils/interfaces';
 
-export default function PasswordChangeForm({ errors, user }: FormProps) {
-  const { data, setData } = useForm({
+export default function PasswordChangeForm({}: FormProps) {
+  const { url } = usePage();
+  const { data, setData, errors, patch } = useForm({
     password: '',
     password_confirmation: '',
     currentPassword: '',
@@ -23,11 +23,7 @@ export default function PasswordChangeForm({ errors, user }: FormProps) {
 
   async function handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
-    try {
-      await axiosInstance.patch(`/user/${user.id}/profile`, data);
-    } catch (error) {
-      console.error(error.message);
-    }
+    patch(`${url}`);
   }
 
   return (
@@ -79,7 +75,9 @@ export default function PasswordChangeForm({ errors, user }: FormProps) {
             required={true}
             className="block w-2/3 mb-1 py-2 ps-5 bg-slate-50 text-sm placeholder:text-sm rounded-lg border border-3 border-violet-100 hover:border-violet-300 focus:bg-violet-50"
           />
-          <p className={errors?.currentPassword ? errorStyles : errorStyles + ' mb-4'}>{errors?.currentPassword}</p>
+          <p className={errors?.currentPassword ? errorStyles : errorStyles + ' mb-4'}>
+            {errors?.currentPassword}
+          </p>
 
           <div className="btns w-2/3 text-right">
             <button

@@ -1,9 +1,9 @@
-import axiosInstance from '#utils/axios_instance';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { FormProps } from '~/utils/interfaces';
 
-export default function EmailChangeForm({ errors, user }: FormProps) {
-  const { data, setData } = useForm({
+export default function EmailChangeForm({ user }: FormProps) {
+  const { url } = usePage();
+  const { data, setData, errors, patch } = useForm({
     email: user?.email,
     password: '',
   });
@@ -21,11 +21,9 @@ export default function EmailChangeForm({ errors, user }: FormProps) {
 
   async function handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
-    try {
-      await axiosInstance.patch(`/user/${user.id}/profile`, data);
-    } catch (error) {
-      console.error(error.message);
-    }
+    patch(`${url}`, {
+      onError: (error) => console.log(error),
+    });
   }
 
   return (
@@ -62,7 +60,7 @@ export default function EmailChangeForm({ errors, user }: FormProps) {
             className="block w-2/3 mb-1 py-2 ps-5 text-sm placeholder:text-sm bg-slate-50 rounded-lg border border-3 border-viole-100 hover:border-viole-300 focus:bg-viole-50"
           />
         </div>
-        <p className={errors?.email ? errorStyles : errorStyles + ' mb-4'}>{errors?.email}</p>
+        <p className={errors?.email ? errorStyles : errorStyles + ' mb-4'}>{errors?.password}</p>
 
         <div className="btns w-2/3 text-right">
           <button

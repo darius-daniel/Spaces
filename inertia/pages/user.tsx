@@ -62,8 +62,13 @@ export default function User() {
         </p>
 
         <div className="mx-2 text-purple-800 mt-60 rounded-xl shadow-xl">
-          <div className="py-2 ps-7 bg-purple-100 text-purple-800 rounded-t-xl">
-            {user?.email ? user?.email : 'Username'}
+          <div className="flex flex-row gap-5 py-2 ps-7 bg-purple-100 text-purple-800 rounded-t-xl">
+            <img
+              src="https://placehold.co/50"
+              alt="Profile image"
+              className="text-xs rounded-full"
+            />
+            <p className="text-lg font-bold mt-3">{user?.username ? user.username : user?.email}</p>
           </div>
           <div>
             <div
